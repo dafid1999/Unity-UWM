@@ -5,7 +5,6 @@ using UnityEngine;
 public class Zadanie_2 : MonoBehaviour
 {
     public float speed;
-    private Transform target;
     private bool Forward = false;
     private bool Back = false;
     
