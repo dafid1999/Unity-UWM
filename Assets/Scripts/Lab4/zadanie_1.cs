@@ -1,3 +1,4 @@
+using Random = UnityEngine.Random;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ public class zadanie_1 : MonoBehaviour
     int objectCounter = 0;
     Collider m_Collider;
     Vector3 m_Min, m_Max;
+    private Material blue;
     // obiekt do generowania
     public GameObject block;
 
@@ -50,9 +52,13 @@ public class zadanie_1 : MonoBehaviour
 
     IEnumerator GenerujObiekt()
     {
+        Material[] mats = Resources.LoadAll("Materials/Lab4_zad1/", typeof(Material)).Cast<Material>().ToArray();
         Debug.Log("wywołano coroutine");
         foreach(Vector3 pos in positions)
         {
+            var rend = block.GetComponent<Renderer>();
+            var los = Random.Range(0,5);
+            rend.material = mats[los];
             Instantiate(this.block, this.positions.ElementAt(this.objectCounter++), Quaternion.identity);
             yield return new WaitForSeconds(this.delay);
         }
