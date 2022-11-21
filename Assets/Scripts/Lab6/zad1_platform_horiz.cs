@@ -7,32 +7,32 @@ public class zad1_platform_horiz : MonoBehaviour
     public float elevatorSpeed = 2f;
     private bool isRunning = false;
     public float distance = 6.6f;
-    private bool isRunningUp = true;
-    private bool isRunningDown = false;
-    private float downPosition;
-    private float upPosition;
+    private bool isRunningRight = true;
+    private bool isRunningLeft = false;
+    private float firstPosition;
+    private float lastPosition;
     private Transform oldParent;
 
     void Start()
     {
-        upPosition = transform.position.y + distance;
-        downPosition = transform.position.y;
+        lastPosition = transform.position.z + distance;
+        firstPosition = transform.position.z;
     }
 
     void Update()
     {
-        if (isRunningUp && transform.position.y >= upPosition)
+        if (isRunningRight && transform.position.z >= lastPosition)
         {
             isRunning = false;
         }
-        else if (isRunningDown && transform.position.y <= downPosition)
+        else if (isRunningLeft && transform.position.z <= firstPosition)
         {
             isRunning = false;
         }
 
         if (isRunning)
         {
-            Vector3 move = transform.up * elevatorSpeed * Time.deltaTime;
+            Vector3 move = -transform.forward * elevatorSpeed * Time.deltaTime;
             transform.Translate(move);
         }
     }
@@ -43,19 +43,19 @@ public class zad1_platform_horiz : MonoBehaviour
         {
             Debug.Log("Player wszedł na windę.");
             // zapamiętujemy "starego rodzica"
-            // oldParent = other.gameObject.transform.parent;
+            oldParent = other.gameObject.transform.parent;
             // skrypt przypisany do windy, ale other może być innym obiektem
-            // other.gameObject.transform.parent = transform;
-            if (transform.position.y >= upPosition)
+            other.gameObject.transform.parent = transform;
+            if (transform.position.z >= lastPosition)
             {
-                isRunningDown = true;
-                isRunningUp = false;
+                isRunningRight = true;
+                isRunningLeft = false;
                 elevatorSpeed = -elevatorSpeed;
             }
-            else if (transform.position.y <= downPosition)
+            else if (transform.position.z <= firstPosition)
             {
-                isRunningUp = true;
-                isRunningDown = false;
+                isRunningRight = false;
+                isRunningLeft = true;
                 elevatorSpeed = Mathf.Abs(elevatorSpeed);
             }
             isRunning = true;
