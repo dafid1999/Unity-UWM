@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class zad1_platform_horiz : MonoBehaviour
+public class zad1 : MonoBehaviour
 {
     public float elevatorSpeed = 2f;
     private bool isRunning = false;
-    public float distance = 6.6f;
-    private bool isRunningRight = true;
+    public float distance = 7.0f;
+    private bool isRunningRight = false;
     private bool isRunningLeft = false;
     private float firstPosition;
     private float lastPosition;
@@ -15,24 +15,24 @@ public class zad1_platform_horiz : MonoBehaviour
 
     void Start()
     {
-        lastPosition = transform.position.z + distance;
+        lastPosition = transform.position.z - distance;
         firstPosition = transform.position.z;
     }
 
     void Update()
     {
-        if (isRunningRight && transform.position.z >= lastPosition)
+        if (isRunningRight && transform.position.z <= lastPosition)
         {
             isRunning = false;
         }
-        else if (isRunningLeft && transform.position.z <= firstPosition)
+        else if (isRunningLeft && transform.position.z >= firstPosition)
         {
             isRunning = false;
         }
 
         if (isRunning)
         {
-            Vector3 move = -transform.forward * elevatorSpeed * Time.deltaTime;
+            Vector3 move = transform.forward * elevatorSpeed * Time.deltaTime;
             transform.Translate(move);
         }
     }
@@ -46,13 +46,13 @@ public class zad1_platform_horiz : MonoBehaviour
             oldParent = other.gameObject.transform.parent;
             // skrypt przypisany do windy, ale other może być innym obiektem
             other.gameObject.transform.parent = transform;
-            if (transform.position.z >= lastPosition)
+            if (transform.position.z >= firstPosition)
             {
                 isRunningRight = true;
                 isRunningLeft = false;
                 elevatorSpeed = -elevatorSpeed;
             }
-            else if (transform.position.z <= firstPosition)
+            else if (transform.position.z <= lastPosition)
             {
                 isRunningRight = false;
                 isRunningLeft = true;
@@ -67,7 +67,7 @@ public class zad1_platform_horiz : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log("Player zszedł z windy.");
-            // other.gameObject.transform.parent = oldParent;
+            other.gameObject.transform.parent = oldParent;
         }
     }
 }
